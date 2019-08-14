@@ -43,6 +43,7 @@ const gitDir = path.join(os.tmpdir(), 'tmp-lint-staged')
 resolveGitDir.mockResolvedValue(gitDir)
 
 const config = {
+  '/*.js': 'root-js-according-to-readme',
   '*.js': 'root-js',
   '**/*.js': 'any-js',
   'deeper/*.js': 'deeper-js',
@@ -100,6 +101,16 @@ describe('generateTasks', () => {
           fileListLength: task.fileList.length
         }).not.toMatchObject({ fileListLength: 0 })
       }
+    })
+  })
+
+  it('should match pattern "/*.js"', async () => {
+    const result = await generateTasks({ config, gitDir, files })
+    const linter = result.find(item => item.pattern === '/*.js')
+    expect(linter).toEqual({
+      pattern: '*.js',
+      commands: 'root-js-according-to-readme',
+      fileList: [`${gitDir}/test.js`].map(path.normalize)
     })
   })
 
