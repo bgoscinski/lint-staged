@@ -90,9 +90,15 @@ describe('generateTasks', () => {
 
     result.forEach(task => {
       if (task.commands === 'unknown-js' || task.commands === 'below-root-py') {
-        expect(task.fileList.length).toEqual(0)
+        expect({
+          commands: task.commands,
+          fileListLength: task.fileList.length
+        }).toMatchObject({ fileListLength: 0 })
       } else {
-        expect(task.fileList.length).not.toEqual(0)
+        expect({
+          commands: task.commands,
+          fileListLength: task.fileList.length
+        }).not.toMatchObject({ fileListLength: 0 })
       }
     })
   })
